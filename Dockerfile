@@ -1,13 +1,20 @@
 # Builder Stage
 FROM node:16 AS builder
 WORKDIR /usr/app
-COPY ./src ./          # в src лежит package.json и код
+
+# все файлы из src (включая package.json) внутрь образа
+COPY ./src/ ./
+
+# ставим прод-зависимости
 RUN npm install --omit=dev
 
-# Final Stage (ВАЖНО: такой же базовый, как в builder!)
+# Final Stage
 FROM node:16
 ENV NODE_ENV=production
 WORKDIR /usr/app
+
+# переносим собранное из builder
 COPY --from=builder /usr/app/ ./
 
-CMD ["node", "index.js"]   # или ["npm","start"] если у тебя так
+# стартуем процесс
+CMD ["node", "index.js"]
