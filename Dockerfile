@@ -2,7 +2,8 @@
 FROM node:16 AS builder
 WORKDIR /usr/app
 COPY ./src ./
-RUN npm ci --only=production
+RUN npm install --omit=dev
+
 
 # Final Stage
 FROM node:16-alpine
